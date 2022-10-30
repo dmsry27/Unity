@@ -3,6 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 public class Player : MonoBehaviour, IBattle, IHealth
 {
     ParticleSystem weaponPS;
@@ -15,6 +19,7 @@ public class Player : MonoBehaviour, IBattle, IHealth
     public float defencePower = 3.0f;
     public float maxHP = 100.0f;
     float hp = 100.0f;
+    float itemPickUpRange = 2.0f;
     bool isAlive = true;
 
     public bool IsAlive => isAlive;
@@ -126,4 +131,21 @@ public class Player : MonoBehaviour, IBattle, IHealth
         ani.SetBool("IsAlive", isAlive);
         onDie?.Invoke();
     }
+
+    public void ItemPickUp()
+    {
+        Collider[] items = Physics.OverlapSphere(transform.position, itemPickUpRange, LayerMask.GetMask("Item"));
+
+        foreach(var item in items)
+        {
+            Destroy(item.gameObject);
+        }
+    }
+
+#if UNITY_EDITOR
+    private void OnDrawGizmos()
+    {
+        Handles.DrawWireDisc(transform.position, transform.up, itemPickUpRange, 4.0f);
+    }
+#endif
 }

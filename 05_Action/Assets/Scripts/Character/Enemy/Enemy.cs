@@ -278,6 +278,30 @@ public class Enemy : MonoBehaviour, IBattle, IHealth
     {
         State = EnemyState.Dead;
         onDie?.Invoke();
+        DropItem();
+    }
+
+    void DropItem()
+    {
+        //float percentage = UnityEngine.Random.Range(0.0f, 1.0f);
+        //uint index;
+
+        //if (percentage < 0.6f)
+        //{
+        //    index = 0;
+        //}
+        //else if (percentage < 0.9f)
+        //{
+        //    index = 1;
+        //}
+        //else
+        //{
+        //    index = 2;
+        //}
+        //GameObject obj = ItemFactory.MakeItem(index);
+        //obj.transform.position = transform.position;
+        //obj.transform.rotation = transform.rotation;
+        ItemFactory.MakeItems(ItemIdCode.Emerald, 7);
     }
 
     public void Attack(IBattle target)

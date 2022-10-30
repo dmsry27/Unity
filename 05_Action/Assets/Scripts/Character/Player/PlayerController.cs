@@ -41,10 +41,12 @@ public class PlayerController : MonoBehaviour
         inputActions.Player.Move.canceled += MoveInput;
         inputActions.Player.MoveModeChange.performed += OnMoveModeChange;
         inputActions.Player.Attack.performed += OnAttack;
+        inputActions.Player.PickUp.performed += OnPickUp;
     }
 
     private void OnDisable()
     {
+        inputActions.Player.PickUp.performed -= OnPickUp;
         inputActions.Player.Attack.performed -= OnAttack;
         inputActions.Player.MoveModeChange.performed -= OnMoveModeChange;
         inputActions.Player.Move.canceled -= MoveInput;
@@ -153,5 +155,10 @@ public class PlayerController : MonoBehaviour
             ani.SetInteger("ComboState", comboState);
             ani.SetTrigger("Attack");
         }
+    }
+
+    private void OnPickUp(InputAction.CallbackContext _)
+    {
+        player.ItemPickUp();
     }
 }
