@@ -27,8 +27,17 @@ public class Enemy : MonoBehaviour, IBattle, IHealth
     Rigidbody rigid;
 
     float waitTimer;    // 남아있는 기다려야하는 시간
-    EnemyState state = EnemyState.Patrol;   // 현재 적의 상태
 
+    public ItemDropInfo[] dropItems;
+    [System.Serializable]
+    public struct ItemDropInfo
+    {
+        public ItemIdCode id;
+        [Range(0.0f, 1.0f)]
+        public float dropPercentage;
+    }
+
+    EnemyState state = EnemyState.Patrol;   // 현재 적의 상태
     protected enum EnemyState
     {
         Wait = 0,
@@ -159,7 +168,7 @@ public class Enemy : MonoBehaviour, IBattle, IHealth
             WaypointTarget = waypoints.Current;
         else
             WaypointTarget = transform;
-        
+
         // Start에서 초기값은 설정해주는게 좋다.
 
         //state = EnemyState.Wait;        
@@ -278,30 +287,27 @@ public class Enemy : MonoBehaviour, IBattle, IHealth
     {
         State = EnemyState.Dead;
         onDie?.Invoke();
-        DropItem();
+        MakeDropItem();
     }
 
-    void DropItem()
+    void MakeDropItem()
     {
-        //float percentage = UnityEngine.Random.Range(0.0f, 1.0f);
-        //uint index;
-
-        //if (percentage < 0.6f)
-        //{
-        //    index = 0;
-        //}
-        //else if (percentage < 0.9f)
-        //{
-        //    index = 1;
-        //}
-        //else
-        //{
-        //    index = 2;
-        //}
-        //GameObject obj = ItemFactory.MakeItem(index);
-        //obj.transform.position = transform.position;
-        //obj.transform.rotation = transform.rotation;
-        ItemFactory.MakeItems(ItemIdCode.Emerald, 7);
+        // 유효하지 않은 값일때 확률이 높ㅇ느 녀석으로 대체한다라고 이해하면된다? max
+        float percentage = UnityEngine.Random.Range(0.0f, 1.0f);
+        int index = 0;
+        float checkPercentage = 0.0f;
+        for(int i = 0; i < dropItems.Length; i++)
+        {
+            checkPercentage += dropItems[i].dropPercentage;
+            if( percentage <= checkPercentage )
+            {
+                index = i;
+                break;
+            }
+        }
+        GameObject obj = ItemFactory.MakeItem(index);
+        obj.transform.position = transform.position;
+        obj.transform.rotation = transform.rotation;
     }
 
     public void Attack(IBattle target)
@@ -353,9 +359,9 @@ public class Enemy : MonoBehaviour, IBattle, IHealth
         Debug.Log($"{gameObject.name}이 죽었습니다.");
     }
 
+#if UNITY_EDITOR
     private void OnDrawGizmos()
     {
-#if UNITY_EDITOR
         Handles.color = Color.yellow;
         Handles.DrawWireDisc(transform.position, transform.up, sightRange);
 
@@ -373,6 +379,27 @@ public class Enemy : MonoBehaviour, IBattle, IHealth
         Handles.DrawLine(transform.position, transform.position + q1 * forward);
         Handles.DrawLine(transform.position, transform.position + q2 * forward);
         Handles.DrawWireArc(transform.position, transform.up, q1 * forward, sightHalfAngle * 2, sightRange, 5.0f);      // 항상 정방향으로 생각
-#endif
+
     }
+
+    /// <summary>
+    /// Inspector 창에서 값이 성공적으로 변경되었을 때 실행
+    /// </summary>
+    private void OnValidate()
+    {
+        if (State != EnemyState.Dead)
+        {
+            // 드랍 아이템의 드랍 확률 합을 1로 만들기
+            float total = 0.0f;
+            foreach (var item in dropItems)
+            {
+                total += item.dropPercentage;
+            }
+            for (int i = 0; i < dropItems.Length; i++)
+            {
+                dropItems[i].dropPercentage /= total;
+            }
+        }
+    }
+#endif
 }

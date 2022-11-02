@@ -671,8 +671,24 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6607114845976435107, guid: f7479be65b9493a468dca252940184ac, type: 3}
+      propertyPath: dropItems.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6607114845976435107, guid: f7479be65b9493a468dca252940184ac, type: 3}
       propertyPath: dropItemPrefabs.Array.size
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6607114845976435107, guid: f7479be65b9493a468dca252940184ac, type: 3}
+      propertyPath: dropItems.Array.data[0].id
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6607114845976435107, guid: f7479be65b9493a468dca252940184ac, type: 3}
+      propertyPath: dropItems.Array.data[1].id
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6607114845976435107, guid: f7479be65b9493a468dca252940184ac, type: 3}
+      propertyPath: dropItems.Array.data[2].id
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6607114845976435107, guid: f7479be65b9493a468dca252940184ac, type: 3}
       propertyPath: dropItemPrefabs.Array.data[0]
@@ -686,6 +702,18 @@ PrefabInstance:
       propertyPath: dropItemPrefabs.Array.data[2]
       value: 
       objectReference: {fileID: 1456573863092318797, guid: 79691f1bb27e6924085c88b1968f2853, type: 3}
+    - target: {fileID: 6607114845976435107, guid: f7479be65b9493a468dca252940184ac, type: 3}
+      propertyPath: dropItems.Array.data[0].dropPercentage
+      value: NaN
+      objectReference: {fileID: 0}
+    - target: {fileID: 6607114845976435107, guid: f7479be65b9493a468dca252940184ac, type: 3}
+      propertyPath: dropItems.Array.data[1].dropPercentage
+      value: NaN
+      objectReference: {fileID: 0}
+    - target: {fileID: 6607114845976435107, guid: f7479be65b9493a468dca252940184ac, type: 3}
+      propertyPath: dropItems.Array.data[2].dropPercentage
+      value: NaN
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f7479be65b9493a468dca252940184ac, type: 3}
 --- !u!1 &1128939981

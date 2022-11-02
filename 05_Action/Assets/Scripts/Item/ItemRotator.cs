@@ -28,7 +28,8 @@ public class ItemRotator : MonoBehaviour
     private void Update()
     {
         timeElapsed += Time.deltaTime;
-
+        newPosition.x = transform.parent.position.x;
+        newPosition.z = transform.parent.position.z;
         newPosition.y = minHeight + (1 - Mathf.Cos(timeElapsed)) * trans;
 
         transform.position = newPosition;

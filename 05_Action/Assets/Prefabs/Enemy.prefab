@@ -486,6 +486,9 @@ MonoBehaviour:
   waitTime: 1
   sightRange: 7
   sightHalfAngle: 50
+  dropItems:
+  - id: 0
+    dropPercentage: 1
   attackPower: 10
   defencePower: 3
   maxHP: 100

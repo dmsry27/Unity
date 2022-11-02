@@ -27,5 +27,6 @@ public class Test_Battle : TestBase
         //GameManager.Inst.ItemData[0];     
         //GameManager.Inst.ItemData[ItemIdCode.Diamond];
         ItemFactory.MakeItem(ItemIdCode.Ruby);
+        ItemFactory.MakeItem(ItemIdCode.Emerald, 8);
     }
 }
