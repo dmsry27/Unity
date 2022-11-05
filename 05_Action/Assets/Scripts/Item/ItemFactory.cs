@@ -20,10 +20,10 @@ public class ItemFactory
     /// <returns>생성된 아이템</returns>
     public static GameObject MakeItem(ItemIdCode code)
     {
-        GameObject obj = new GameObject();      // 빈 오브젝트 생성
-        Item item = obj.AddComponent<Item>();
-        item.data = GameManager.Inst.ItemData[code];
-        
+        GameObject obj = new GameObject();              // 빈 오브젝트 생성은 가능
+        Item item = obj.AddComponent<Item>();           // 비어있는 데이터를 채워야함
+        item.data = GameManager.Inst.ItemData[code];    // 게임메니저를 통해 ItemDataManager접근, 인덱서(id or code)를 통해 데이터 접근
+
         string[] itemName = item.data.name.Split("_");
         obj.name = $"{itemName[1]}_{itemCount++}";
         obj.layer = LayerMask.NameToLayer("Item");

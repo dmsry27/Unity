@@ -390,9 +390,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1612171946173053940}
   - component: {fileID: 1658391276989180966}
+  - component: {fileID: 6607114845976435107}
   - component: {fileID: 1801896391312802077}
   - component: {fileID: 6723654138863001485}
-  - component: {fileID: 6607114845976435107}
   - component: {fileID: 3408122097334919741}
   m_Layer: 8
   m_Name: Enemy
@@ -440,6 +440,31 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &6607114845976435107
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1609772524153085514}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f81710fa5ff52354ab829c8fad30ec1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waypoints: {fileID: 0}
+  moveSpeed: 3
+  waitTime: 1
+  sightRange: 7
+  sightHalfAngle: 50
+  dropItems:
+  - id: 0
+    dropPercentage: 0.9038917
+  - id: 1
+    dropPercentage: 0.096108355
+  attackPower: 10
+  defencePower: 3
+  maxHP: 100
 --- !u!54 &1801896391312802077
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -469,29 +494,6 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0.5, z: 0}
---- !u!114 &6607114845976435107
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1609772524153085514}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f81710fa5ff52354ab829c8fad30ec1b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  waypoints: {fileID: 0}
-  moveSpeed: 3
-  waitTime: 1
-  sightRange: 7
-  sightHalfAngle: 50
-  dropItems:
-  - id: 0
-    dropPercentage: 1
-  attackPower: 10
-  defencePower: 3
-  maxHP: 100
 --- !u!195 &3408122097334919741
 NavMeshAgent:
   m_ObjectHideFlags: 0

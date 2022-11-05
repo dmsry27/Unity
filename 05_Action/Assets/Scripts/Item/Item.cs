@@ -8,10 +8,10 @@ using UnityEngine;
 /// </summary>
 public class Item : MonoBehaviour
 {
-    public ItemData data;
+    public ItemData data;       // 아이템의 정보
 
     private void Start()
     {
-        Instantiate(data.modelPrefab, transform);
+        Instantiate(data.modelPrefab, transform);       // 아이템의 외형 추가
     }
 }

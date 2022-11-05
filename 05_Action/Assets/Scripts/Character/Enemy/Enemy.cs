@@ -29,7 +29,8 @@ public class Enemy : MonoBehaviour, IBattle, IHealth
     float waitTimer;    // 남아있는 기다려야하는 시간
 
     public ItemDropInfo[] dropItems;
-    [System.Serializable]
+
+    [System.Serializable]       // public 구조체를 유니티상에서 보기 위해 필요
     public struct ItemDropInfo
     {
         public ItemIdCode id;
@@ -292,22 +293,29 @@ public class Enemy : MonoBehaviour, IBattle, IHealth
 
     void MakeDropItem()
     {
-        // 유효하지 않은 값일때 확률이 높ㅇ느 녀석으로 대체한다라고 이해하면된다? max
         float percentage = UnityEngine.Random.Range(0.0f, 1.0f);
+        // 0.4f로 집에서 해보기
         int index = 0;
+        float max = 0.0f;
+        for (int i = 0; i < dropItems.Length; i++)
+        {
+            if(max < dropItems[i].dropPercentage)
+            {
+                max = dropItems[i].dropPercentage;
+                index = i;      // index의 디폴트는 가장 확률이 높은 아이템으로 설정
+            }
+        }
         float checkPercentage = 0.0f;
-        for(int i = 0; i < dropItems.Length; i++)
+        for (int i = 0; i < dropItems.Length; i++)
         {
             checkPercentage += dropItems[i].dropPercentage;
-            if( percentage <= checkPercentage )
+            if (percentage <= checkPercentage)
             {
                 index = i;
                 break;
             }
         }
-        GameObject obj = ItemFactory.MakeItem(index);
-        obj.transform.position = transform.position;
-        obj.transform.rotation = transform.rotation;
+        GameObject obj = ItemFactory.MakeItem(dropItems[index].id, transform.position, true);
     }
 
     public void Attack(IBattle target)
@@ -379,11 +387,11 @@ public class Enemy : MonoBehaviour, IBattle, IHealth
         Handles.DrawLine(transform.position, transform.position + q1 * forward);
         Handles.DrawLine(transform.position, transform.position + q2 * forward);
         Handles.DrawWireArc(transform.position, transform.up, q1 * forward, sightHalfAngle * 2, sightRange, 5.0f);      // 항상 정방향으로 생각
-
     }
 
     /// <summary>
-    /// Inspector 창에서 값이 성공적으로 변경되었을 때 실행
+    /// Editor-only function that Unity calls when the script is loaded or a value changes in the Inspector.
+    /// Unsupported type 에러 발생시 컴포넌트를 지운후 다시 추가 (Serializable때문에 발생)
     /// </summary>
     private void OnValidate()
     {
@@ -391,10 +399,13 @@ public class Enemy : MonoBehaviour, IBattle, IHealth
         {
             // 드랍 아이템의 드랍 확률 합을 1로 만들기
             float total = 0.0f;
-            foreach (var item in dropItems)
+            foreach(var item in dropItems)
             {
                 total += item.dropPercentage;
             }
+            // 값 입력할 때와 Enter입력시 둘 다 실행됨
+            // (0, 0, 1) -> 0.3입력시 (0.3, 0, 1 / 1.3)으로 처리됨
+            // (0.3, 0, 0.7)이 나오려면 어떻게 해야 할까?
             for (int i = 0; i < dropItems.Length; i++)
             {
                 dropItems[i].dropPercentage /= total;
