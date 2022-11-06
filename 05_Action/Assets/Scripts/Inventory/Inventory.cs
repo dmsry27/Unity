@@ -8,11 +8,14 @@ using UnityEngine;
 public class Inventory 
 {
     public const int Default_Inventory_Size = 6;
+    public const uint TempSlotIndex = 99999;        // 어떤 숫자든 상관없다. slots의 인덱스가 될 수 있는 값만 아니면 된다.
 
     ItemSlot[] slots = null;
+    ItemSlot tempSlot = null;
     ItemDataManager dataManager;
 
     public int SlotCount => slots.Length;
+    public ItemSlot TempSlot => tempSlot;
 
     // 생성자 : 클래스가 new될 때 실행되는 함수
     public Inventory(int size = Default_Inventory_Size)
@@ -23,6 +26,7 @@ public class Inventory
             slots[i] = new ItemSlot((uint)i);
         }
         Debug.Log($"{size}칸짜리 인벤토리 생성");
+        tempSlot = new ItemSlot(TempSlotIndex);
         dataManager = GameManager.Inst.ItemData;
     }
 
@@ -40,8 +44,7 @@ public class Inventory
 
         if (targetSlot != null)
         {
-            targetSlot.IncreaseSlotItem();
-            result = true;
+            result = targetSlot.IncreaseSlotItem(out uint _);
         }
         else
         {
@@ -63,7 +66,6 @@ public class Inventory
         return result;
     }
 
-    // 아이템 이동
     public bool AddItem(ItemIdCode code, uint index)
     {
         return AddItem(dataManager[code], index);
@@ -73,23 +75,26 @@ public class Inventory
     {
         bool result = false;
 
-        if(IsValidSlotIndex(index))
+        if (IsValidSlotIndex(index))
         {
             ItemSlot slot = slots[index];
-            if(slot.ItemData != null)
-            {
-                if(slot.ItemData == data)
-                {
-                    slot.IncreaseSlotItem();
-                }
-                else
-                {
 
-                }
+            if (slot.IsEmpty)
+            {
+                slot.AssignSlotItem(data);
+                result = true;
             }
             else
             {
-                slot.AssignSlotItem(data);
+                if (slot.ItemData == data)
+                {
+                    
+                    result = slot.IncreaseSlotItem(out uint _);
+                }
+                else
+                {
+                    Debug.Log($"실패 : 인벤토리 {index}슬롯에 다른 아이템이 존재합니다.");
+                }
             }
         }
         else
@@ -138,8 +143,42 @@ public class Inventory
         return result;
     }
 
+    // 아이템 이동
+    public void MoveItem(uint from, uint to)
+    {
+        // from에 아이템이 있고, to에 있다.
+        // from에 아이템이 있고, to에 없다.
+        // from에 아이템이 없고, to에 있다.   -> 아무 변화 없음
+        // from에 아이템이 없고, to에 없다.   -> 아무 변화 없음
+
+        if (IsValidAndNotEmptySlotIndex(from) && IsValidSlotIndex(to))
+        {
+            ItemSlot fromSlot = slots[from];
+            ItemSlot toSlot = slots[to];
+
+            if(fromSlot.ItemData == toSlot.ItemData)
+            {
+                // from과 to가 같은 아이템을 가지고 있으면 to에서 합치기
+                toSlot.IncreaseSlotItem(out uint overCount, fromSlot.ItemCount);    // 아이템 증가 시도한 후 넘친 갯수 받아오기
+                fromSlot.DecreaseSlotItem(fromSlot.ItemCount - overCount);          // from에서 to에 증가한만큼 감소시키기
+                Debug.Log($"인벤토리의 {from}슬롯에서 {to}슬롯으로 아이템 합치기 성공");
+            }
+            else
+            {
+                ItemData tempData = fromSlot.ItemData;
+                uint tempCount = fromSlot.ItemCount;
+
+                fromSlot.AssignSlotItem(toSlot.ItemData, toSlot.ItemCount);
+                toSlot.AssignSlotItem(tempData, tempCount);
+                Debug.Log($"인벤토리의 {from}슬롯과 {to}슬롯의 아이템 교체 성공");
+            }
+        }
+    }
+
 
     // 아이템 사용
+
+    bool IsValidAndNotEmptySlotIndex(uint index) => (IsValidSlotIndex(index) && !slots[index].IsEmpty);
 
     bool IsValidSlotIndex(uint index) => (index < SlotCount);   // 배열의 크기보다 Index는 무조건 작다.
 

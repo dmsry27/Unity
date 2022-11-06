@@ -10,4 +10,5 @@ public class ItemData : ScriptableObject
     public string itemName = "아이템";
     public GameObject modelPrefab;          // 아이템의 외형을 표시할 프리펩
     public uint value;
+    public uint maxStackCount = 1;
 }
