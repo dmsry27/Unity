@@ -11,11 +11,12 @@ public class Inventory
     public const uint TempSlotIndex = 99999;        // 어떤 숫자든 상관없다. slots의 인덱스가 될 수 있는 값만 아니면 된다.
 
     ItemSlot[] slots = null;
-    ItemSlot tempSlot = null;
+    ItemSlot tempSlot = null;       // 드래그 중인 아이템을 임시 저장하는 슬롯
     ItemDataManager dataManager;
 
     public int SlotCount => slots.Length;
     public ItemSlot TempSlot => tempSlot;
+    public ItemSlot this[uint index] => slots[index];
 
     // 생성자 : 클래스가 new될 때 실행되는 함수
     public Inventory(int size = Default_Inventory_Size)
@@ -143,6 +144,14 @@ public class Inventory
         return result;
     }
 
+    public void ClearInventory()
+    {
+        foreach(var slot in slots)
+        {
+            slot.ClearSlotItem();
+        }
+    }
+
     // 아이템 이동
     public void MoveItem(uint from, uint to)
     {
@@ -153,8 +162,8 @@ public class Inventory
 
         if (IsValidAndNotEmptySlotIndex(from) && IsValidSlotIndex(to))
         {
-            ItemSlot fromSlot = slots[from];
-            ItemSlot toSlot = slots[to];
+            ItemSlot fromSlot = (from == Inventory.TempSlotIndex) ? TempSlot : slots[from];
+            ItemSlot toSlot = (to == Inventory.TempSlotIndex) ? TempSlot : slots[to];
 
             if(fromSlot.ItemData == toSlot.ItemData)
             {
@@ -175,12 +184,20 @@ public class Inventory
         }
     }
 
-
     // 아이템 사용
 
-    bool IsValidAndNotEmptySlotIndex(uint index) => (IsValidSlotIndex(index) && !slots[index].IsEmpty);
+    bool IsValidAndNotEmptySlotIndex(uint index)
+    {
+        if (IsValidSlotIndex(index))
+        {
+            ItemSlot testSlot = (index == TempSlotIndex) ? TempSlot : slots[index];
 
-    bool IsValidSlotIndex(uint index) => (index < SlotCount);   // 배열의 크기보다 Index는 무조건 작다.
+            return !testSlot.IsEmpty;
+        }
+        return false;
+    }
+
+    bool IsValidSlotIndex(uint index) => (index < SlotCount) || (index == Inventory.TempSlotIndex);   // 배열의 크기보다 Index는 무조건 작다.
 
     ItemSlot FindSameItem(ItemData itemData)
     {
@@ -194,7 +211,6 @@ public class Inventory
                 break;
             }
         }
-
         return findSlot;
     }
 
