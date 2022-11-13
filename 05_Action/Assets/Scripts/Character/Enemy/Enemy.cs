@@ -194,6 +194,7 @@ public class Enemy : MonoBehaviour, IBattle, IHealth
     void Update_Patrol()
     {
         // 도착 확인
+        // agent.SetDestination은 경로 계산이 끝날때까지 remainingDistance를 0으로 처리한다.
         // agent.pathPending : 경로 계산이 진행중인지 확인. true면 아직 경로 계산 중
         // agent.stoppingDistance : 도착지점에 도착했다고 인정되는 거리
         if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)

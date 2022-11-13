@@ -162,8 +162,8 @@ public class Inventory
 
         if (IsValidAndNotEmptySlotIndex(from) && IsValidSlotIndex(to))
         {
-            ItemSlot fromSlot = (from == Inventory.TempSlotIndex) ? TempSlot : slots[from];
-            ItemSlot toSlot = (to == Inventory.TempSlotIndex) ? TempSlot : slots[to];
+            ItemSlot fromSlot = (from == TempSlotIndex) ? TempSlot : slots[from];     // 삼항연산자(if else구문을 한 줄로 표현가능)
+            ItemSlot toSlot = (to == TempSlotIndex) ? TempSlot : slots[to];           // (조건식) ? true : false
 
             if(fromSlot.ItemData == toSlot.ItemData)
             {
@@ -192,12 +192,12 @@ public class Inventory
         {
             ItemSlot testSlot = (index == TempSlotIndex) ? TempSlot : slots[index];
 
-            return !testSlot.IsEmpty;
+            return !testSlot.IsEmpty;       // 적절한 인덱스이면서 아이템이 들어있다.
         }
         return false;
     }
 
-    bool IsValidSlotIndex(uint index) => (index < SlotCount) || (index == Inventory.TempSlotIndex);   // 배열의 크기보다 Index는 무조건 작다.
+    bool IsValidSlotIndex(uint index) => (index < SlotCount) || (index == TempSlotIndex);   // 배열의 크기보다 Index는 무조건 작다.
 
     ItemSlot FindSameItem(ItemData itemData)
     {

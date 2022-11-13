@@ -12,4 +12,5 @@ public class ItemData : ScriptableObject
     public Sprite itemIcon;
     public uint value;
     public uint maxStackCount = 1;
+    public string itemDescription;
 }

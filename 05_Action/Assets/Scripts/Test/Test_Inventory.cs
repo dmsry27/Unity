@@ -5,112 +5,109 @@ using UnityEngine.InputSystem;
 
 public class Test_Inventory : TestBase
 {
-    public InventoryUI inventoryUI;
     [Range(1, 30)]
     public int invenSize = 10;
+    public InventoryUI inventoryUI;
 
-    Inventory inventory;
+    Inventory inven;
 
     private void Start()
     {
-        inventory = new Inventory(invenSize);
-        inventoryUI.InitailizeInventory(inventory);
+        inven = new Inventory(invenSize);
+        inventoryUI.InitializeInventory(inven);
     }
 
     protected override void Test1(InputAction.CallbackContext _)
     {
-        inventory.PrintInventory();
-        inventoryUI.InitailizeInventory(inventory);
+        inven.PrintInventory();
     }
 
     protected override void Test2(InputAction.CallbackContext _)
     {
         Test_AddItemForUI();
+        //inventoryUI.InitializeInventory(inven);
     }
 
     protected override void Test3(InputAction.CallbackContext _)
     {
-        inventory.MoveItem(0, 3);
+        inven.MoveItem(0, 3);
     }
 
     protected override void Test4(InputAction.CallbackContext _)
     {
-        inventory.MoveItem(3, 0);
+        inven.MoveItem(3, 0);
     }
 
     protected override void Test5(InputAction.CallbackContext _)
     {
-        inventory.AddItem(ItemIdCode.Ruby, 9);
-        inventory.AddItem(ItemIdCode.Emerald, 8);
-        inventory.AddItem(ItemIdCode.Emerald, 20);
     }
 
     void Test_AddItemForUI()
     {
-        inventory.ClearInventory();
+        inven.ClearInventory();
 
-        inventory.AddItem(ItemIdCode.Ruby);
-        inventory.AddItem(ItemIdCode.Ruby);
-        inventory.AddItem(ItemIdCode.Ruby);
-        inventory.AddItem(ItemIdCode.Ruby);
-        inventory.AddItem(ItemIdCode.Emerald);
-        inventory.AddItem(ItemIdCode.Emerald);
-        inventory.AddItem(ItemIdCode.Diamond);
-        inventory.PrintInventory();
+        inven.AddItem(ItemIdCode.Ruby);
+        inven.AddItem(ItemIdCode.Ruby);
+        inven.AddItem(ItemIdCode.Ruby);
+        inven.AddItem(ItemIdCode.Ruby);
+        inven.AddItem(ItemIdCode.Emerald);
+        inven.AddItem(ItemIdCode.Emerald);
+        inven.AddItem(ItemIdCode.Diamond);
+        inven.PrintInventory();
 
-        inventory.AddItem(ItemIdCode.Ruby, 5);
-        inventory.AddItem(ItemIdCode.Ruby, 5);
-        inventory.AddItem(ItemIdCode.Ruby, 5);
-        inventory.AddItem(ItemIdCode.Ruby, 5);
-        inventory.PrintInventory();
+        inven.AddItem(ItemIdCode.Ruby, 5);
+        inven.AddItem(ItemIdCode.Ruby, 5);
+        inven.AddItem(ItemIdCode.Ruby, 5);
+        inven.AddItem(ItemIdCode.Ruby, 5);
+        inven.PrintInventory();
     }
 
     private void Test_AddItem()
     {
-        inventory.AddItem(ItemIdCode.Ruby);
-        inventory.AddItem(ItemIdCode.Emerald);
-        inventory.AddItem(ItemIdCode.Diamond);
-        inventory.AddItem(ItemIdCode.Emerald);
-        inventory.AddItem(ItemIdCode.Ruby);
-        inventory.PrintInventory();
+        inven.AddItem(ItemIdCode.Ruby);
+        inven.AddItem(ItemIdCode.Emerald);
+        inven.AddItem(ItemIdCode.Diamond);
+        inven.AddItem(ItemIdCode.Emerald);
+        inven.AddItem(ItemIdCode.Ruby);
+        inven.PrintInventory();
     }
 
-    private void MoveItem()
+    private void Test_MoveItem()
     {
-        inventory.MoveItem(0, 9);       // 1.에메(2) 2.다야(1) 9.루비(2)
-        inventory.PrintInventory();
-        inventory.MoveItem(9, 15);
-        inventory.PrintInventory();
-        inventory.MoveItem(1, 2);       // 1.다야(1) 2.에메(2) 9.루비(2)
-        inventory.PrintInventory();
-        inventory.MoveItem(5, 6);
-        inventory.PrintInventory();
-        inventory.MoveItem(5, 1);
-        inventory.PrintInventory();
+        inven.MoveItem(0, 9);       // 1.에메(2) 2.다야(1) 9.루비(2)
+        inven.PrintInventory();
+        inven.MoveItem(9, 15);
+        inven.PrintInventory();
+        inven.MoveItem(1, 2);       // 1.다야(1) 2.에메(2) 9.루비(2)
+        inven.PrintInventory();
+        inven.MoveItem(5, 6);
+        inven.PrintInventory();
+        inven.MoveItem(5, 1);
+        inven.PrintInventory();
 
-        inventory.AddItem(ItemIdCode.Diamond, 0);   // 0.다야(1) 1.다야(1) 2.에메(2) 9.루비(2)
-        inventory.PrintInventory();
-        inventory.MoveItem(0, 1);       // 1.다야(2) 2.에메(2) 9.루비(2)
-        inventory.PrintInventory();
+        inven.AddItem(ItemIdCode.Diamond, 0);   // 0.다야(1) 1.다야(1) 2.에메(2) 9.루비(2)
+        inven.PrintInventory();
+        inven.MoveItem(0, 1);       // 1.다야(2) 2.에메(2) 9.루비(2)
+        inven.PrintInventory();
     }
 
     private void Test_ItemStack()
     {
-        //inventory.RemoveItem(1);
-        //inventory.RemoveItem(0, 3);
+        //inven.RemoveItem(1);
+        //inven.RemoveItem(0, 3);
 
-        inventory.AddItem(ItemIdCode.Ruby);
-        inventory.AddItem(ItemIdCode.Ruby);
-        inventory.AddItem(ItemIdCode.Ruby);
-        inventory.AddItem(ItemIdCode.Ruby);
-        inventory.AddItem(ItemIdCode.Emerald);
-        inventory.AddItem(ItemIdCode.Emerald);
-        inventory.AddItem(ItemIdCode.Diamond);
-        inventory.PrintInventory();
-        inventory.AddItem(ItemIdCode.Ruby, 5);
-        inventory.AddItem(ItemIdCode.Ruby, 5);
-        inventory.PrintInventory();
-        inventory.MoveItem(0, 5);
-        inventory.PrintInventory();
+        inven.AddItem(ItemIdCode.Ruby);
+        inven.AddItem(ItemIdCode.Ruby);
+        inven.AddItem(ItemIdCode.Ruby);
+        inven.AddItem(ItemIdCode.Ruby);
+        inven.AddItem(ItemIdCode.Emerald);
+        inven.AddItem(ItemIdCode.Emerald);
+        inven.AddItem(ItemIdCode.Diamond);
+        inven.PrintInventory();
+        inven.AddItem(ItemIdCode.Ruby, 5);
+        inven.AddItem(ItemIdCode.Ruby, 5);
+        inven.PrintInventory();
+        inven.MoveItem(0, 5);
+        inven.PrintInventory();
     }
 }
