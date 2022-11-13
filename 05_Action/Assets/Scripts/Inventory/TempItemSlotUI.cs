@@ -9,6 +9,8 @@ using UnityEngine.InputSystem;
 
 public class TempItemSlotUI : ItemSlotUI
 {
+    public Action<bool> onTempSlotOpenClose;
+
     private void Update()
     {
         // 오브젝트의 transform이 스크린좌표가 적용되있기에 마우스의 현재 위치를 스크린좌표로 받아오는 함수를 적용할 수 있다.
@@ -20,12 +22,15 @@ public class TempItemSlotUI : ItemSlotUI
         if(!itemSlot.IsEmpty)
         {
             transform.position = Mouse.current.position.ReadValue();
+            onTempSlotOpenClose?.Invoke(true);
             gameObject.SetActive(true);     // 가볍지만, 빠르진 않다. (컴포넌트 일일이 비활성화함)
         }
     }
 
     public void Close()
+
     {
+        onTempSlotOpenClose?.Invoke(false);
         gameObject.SetActive(false);
     }
 }

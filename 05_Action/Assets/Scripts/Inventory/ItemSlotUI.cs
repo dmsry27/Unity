@@ -7,7 +7,7 @@ using TMPro;
 using System;
 
 // 슬롯 하나를 표현 = 슬롯 배열의 정보는 없다 = 델리게이트를 사용하게 된다
-public class ItemSlotUI : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
+public class ItemSlotUI : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler, IPointerMoveHandler
 {
     protected ItemSlot itemSlot;    // 이 UI와 연결된 ItemSlot
 
@@ -22,8 +22,9 @@ public class ItemSlotUI : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
     public Action<uint> onDragEnd;
     public Action<uint> onDragCancel;
     public Action<uint> onClick;
-    public Action<uint, Vector2> onPointerEnter;
+    public Action<uint> onPointerEnter;
     public Action<uint> onPointerExit;
+    public Action<Vector2> onPointerMove;
 
     private void Awake()
     {
@@ -43,6 +44,7 @@ public class ItemSlotUI : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         onClick = null;
         onPointerEnter = null;
         onPointerExit = null;
+        onPointerMove = null;
 
         Refresh();
     }
@@ -114,13 +116,20 @@ public class ItemSlotUI : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        Vector2 pos = eventData.position;
-        onPointerEnter?.Invoke(ID, pos);
+        onPointerEnter?.Invoke(ID);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         onPointerExit?.Invoke(ID);
+    }
+    
+    /// <summary>
+    /// EventSystems은 마우스 포인터가 이 UI 영역안에서 움직이면 함수를 실행시킨다. 
+    /// </summary>
+    public void OnPointerMove(PointerEventData eventData)
+    {
+        onPointerMove?.Invoke(eventData.position);
     }
 
     /// <summary>

@@ -74,8 +74,8 @@ public class InventoryUI : MonoBehaviour
             slotUIs[i].onClick += OnItemMoveEnd;
             slotUIs[i].onPointerEnter += OnItemDetailOn;
             slotUIs[i].onPointerExit += OnItemDetailOff;
+            slotUIs[i].onPointerMove += OnPointerMove;
         }
-
         tempSlotUI.InitializeSlot(Inventory.TempSlotIndex, inven.TempSlot);
         tempSlotUI.Close();
     }
@@ -99,9 +99,9 @@ public class InventoryUI : MonoBehaviour
         }
     }
 
-    private void OnItemDetailOn(uint slotID, Vector2 pos)
+    private void OnItemDetailOn(uint slotID)
     {
-        detailUI.Open(slotUIs[slotID].ItemSlot.ItemData, pos);
+        detailUI.Open(slotUIs[slotID].ItemSlot.ItemData);
     }
 
     private void OnItemDetailOff(uint _)
@@ -109,5 +109,16 @@ public class InventoryUI : MonoBehaviour
         detailUI.Close();
     }
 
-
+    private void OnPointerMove(Vector2 pointerPos)
+    {
+        if (detailUI.IsOpen)
+        {
+            RectTransform rect = (RectTransform)detailUI.transform;
+            if (pointerPos.x + rect.sizeDelta.x > Screen.width)
+            {
+                pointerPos.x -= rect.sizeDelta.x;
+            }
+            detailUI.transform.position = pointerPos;
+        }
+    }
 }
