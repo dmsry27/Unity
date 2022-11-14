@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class InventoryUI : MonoBehaviour
@@ -70,13 +71,14 @@ public class InventoryUI : MonoBehaviour
             slotUIs[i].Resize(grid.cellSize.x * 0.75f);
             slotUIs[i].onDragBegin += OnItemMoveStart;
             slotUIs[i].onDragEnd += OnItemMoveEnd;
-            slotUIs[i].onDragCancel += OnItemMoveEnd;
+            slotUIs[i].onDragCancel += OnItemMoveCancel;
             slotUIs[i].onClick += OnItemMoveEnd;
             slotUIs[i].onPointerEnter += OnItemDetailOn;
             slotUIs[i].onPointerExit += OnItemDetailOff;
             slotUIs[i].onPointerMove += OnPointerMove;
         }
         tempSlotUI.InitializeSlot(Inventory.TempSlotIndex, inven.TempSlot);
+        tempSlotUI.onTempSlotOpenClose += OnDetailPause;
         tempSlotUI.Close();
     }
 
@@ -86,11 +88,15 @@ public class InventoryUI : MonoBehaviour
         tempSlotUI.Open();
     }
 
-    /// <summary>
-    /// 드래그가 끝나거나 실패했을때 실행
-    /// </summary>
-    /// <param name="slotID">End : endSlotID, Cancel : 드래그 시작슬롯ID</param>
+    // End : endSlotID
     private void OnItemMoveEnd(uint slotID)
+    {
+        OnItemMoveCancel(slotID);
+        detailUI.Open(inven[slotID].ItemData);
+    }
+
+    // Cancel : 드래그 시작슬롯ID
+    private void OnItemMoveCancel(uint slotID)
     {
         inven.MoveItem(Inventory.TempSlotIndex, slotID);
         if(tempSlotUI.ItemSlot.IsEmpty)
@@ -113,12 +119,13 @@ public class InventoryUI : MonoBehaviour
     {
         if (detailUI.IsOpen)
         {
-            RectTransform rect = (RectTransform)detailUI.transform;
-            if (pointerPos.x + rect.sizeDelta.x > Screen.width)
-            {
-                pointerPos.x -= rect.sizeDelta.x;
-            }
-            detailUI.transform.position = pointerPos;
+            detailUI.MovePosition(pointerPos);
         }
+    }
+
+    private void OnDetailPause(bool isPause)
+    {
+        // TempSlot이 열리면(아이템이 옮겨가면, Delegate 위치) bool값을 건네줘 DetailInfoUI의 Set에 적용.
+        detailUI.IsPause = isPause;     
     }
 }

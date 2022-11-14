@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.InputSystem;
 
 public class DetailInfoUI : MonoBehaviour
 {
-    public bool isPause = false;
 
     TextMeshProUGUI itemName;
     TextMeshProUGUI itemValue;
@@ -14,6 +14,19 @@ public class DetailInfoUI : MonoBehaviour
     Image itemIcon;
     CanvasGroup canvas;
 
+    bool isPause = false;
+    public bool IsPause
+    {
+        get => isPause;
+        set 
+        {
+            isPause = value;
+            if(isPause)
+            {
+                Close();
+            }
+        }
+    }
     public bool IsOpen => (canvas.alpha > 0.0f); 
 
     private void Awake()
@@ -34,11 +47,23 @@ public class DetailInfoUI : MonoBehaviour
             itemValue.text = itemData.value.ToString();
             itemDesc.text = itemData.itemDescription;
             canvas.alpha = 1.0f;                // 자식 전부 적용(Group)
+
+            MovePosition(Mouse.current.position.ReadValue());
         }
     }
 
     public void Close()
     {
         canvas.alpha = 0.0f;
+    }
+
+    public void MovePosition(Vector2 pos)
+    {
+        RectTransform rect = (RectTransform)transform;
+        if (pos.x + rect.sizeDelta.x > Screen.width)
+        {
+            pos.x -= rect.sizeDelta.x;
+        }
+        transform.position = pos;
     }
 }

@@ -32,7 +32,7 @@ public class ItemSlotUI : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
         itemCountText = transform.GetChild(1).GetComponent<TextMeshProUGUI>();
     }
 
-    public void InitializeSlot(uint id, ItemSlot slot)
+    public virtual void InitializeSlot(uint id, ItemSlot slot)
     {
         this.id = id;
         this.itemSlot = slot;       // 이 UI가 보여줄 ItemSlot. 할당 작업(연결 작업)

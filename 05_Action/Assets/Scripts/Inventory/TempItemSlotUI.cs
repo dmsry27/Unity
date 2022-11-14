@@ -17,6 +17,13 @@ public class TempItemSlotUI : ItemSlotUI
         transform.position = Mouse.current.position.ReadValue();
     }
 
+    public override void InitializeSlot(uint id, ItemSlot slot)
+    {
+        onTempSlotOpenClose = null;
+
+        base.InitializeSlot(id, slot);
+    }
+
     public void Open()
     {
         if(!itemSlot.IsEmpty)
